@@ -48,7 +48,7 @@ Vous pouvez cliquer sur [ce lien pour obtenir la JavaDoc en HTML](javadoc/PARTIE
 ### Portions de code
 ```
 /**
- * LA méthode main() de l'application, là où tout commence mais... tout se finit-il bien là ?
+ * La méthode main() de l'application, là où tout commence mais... tout se finit-il bien là ?
  *
  * @param args les arguments du programme passés sur la ligne de commande
  */
@@ -81,7 +81,7 @@ public static void main( String[] args ) {
         // Y a-t-il un CPU à cet endroit ?
         if ( cpu != null ) {
             // Oui. Alors l'afficher !
-            if ( cpu.getMips() == UNKNOWN_MIPS ) {
+            if ( cpu.getMips() == cpu.UNKNOWN_MIPS ) {
                 System.out.println( "En " + cpu.getAnnee() + " le CPU " + cpu.getNom() + " avec " + cpu.getTransistors() + 
 " transistors et une puissance de calcul inconnue." );
             } else {
@@ -145,7 +145,6 @@ Nous allons maintenant ré-écrire cette application sous une forme et une struc
 - Portions de code => code qui vous est directement donné
 
 ### Diagramme de classes
-
 ```mermaid
 classDiagram
 
@@ -169,7 +168,7 @@ class CPU {
 }
 
 class View {
-    -Controller ctrl
+    -Controller refCtrl
     +View()
     +rapport_Debut() void
     +rapport_AfficherCPU(CPU) void
@@ -179,8 +178,8 @@ class View {
 }
 
 class Controller {
-    -View view
-    -ServiceCPU service
+    -View refView
+    -ServiceCPU refServiceCPU
     +Controller()
     +start() void
     +setRefView(View view) void
@@ -194,16 +193,16 @@ class ServiceCPU {
     -cpus CPU[]
     -Controller refCtrl
     +ServiceCPU()
-    +AjouterUnNouveau(CPU) boolean
-    +ObtenirLaListe() CPU[]
-    +NombreDeCPUDansLaListe() int
-    +TaileDeLaListe() int
-    +ObtenirUnElement(int numero) CPU
+    +ajouterUnNouveau(CPU) boolean
+    +obtenirLaListe() CPU[]
+    +nombreDeCPUDansLaListe() int
+    +taileDeLaListe() int
+    +obtenirUnElement(int indice) CPU
     +setRefCtrl(Controller ctrl)
     +getRefCtrl() Controller
 }
 note for ServiceCPU "NBRE_CPU = 20"
-note for CPU "UNKNOWN_MIPS = .1.0"
+note for CPU "UNKNOWN_MIPS = -.1.0"
 ServiceCPU o--> "0..n" CPU : cpus
 Controller "1" o--> ServiceCPU : refServiceCPU
 ServiceCPU "1" o--> Controller : refController
@@ -211,18 +210,52 @@ View "1" o--> Controller : refCtrl
 Controller "1" o--> View : refView
 ```
 
+### Structure des packages Java
+Voici la structure des packages pour chaque classe du projet
+```mermaid
+classDiagram
+namespace processeur {
+    class app
+    class models
+    class views
+    class ctrl
+    class services
+}
+namespace app {
+    class Processeur
+}
+namespace models {
+    class CPU 
+}
+
+namespace views {
+    class View
+}
+namespace ctrl {
+    class Controller 
+}
+namespace services {
+    class ServiceCPU 
+}
+
+```
+
 ### Diagramme de séquence
 Voici le diagramme de séquence de la méthode de la méthode `main()` de la classe `Processeur` du package `app` :
 ```mermaid
 sequenceDiagram
     participant main
-    main-->>Controller: ctrl = new Controller()
-    main-->>ServiceCPU: service = new ServiceCPU()
+    main->>Controller: new Controller()
+    Controller-->>main: ctrl
+    main->>ServiceCPU: new ServiceCPU()
+    ServiceCPU-->>main: service
+    main->>View: new View()
+    View-->>main: view
     main->>Controller: setRefServiceCPU(service)
-    main-->>View: view = new View()
     main->>Controller: setRefView(view)
-    main->>View: setRefCtrl(ctrl)
     main->>ServiceCPU: setRefCtrl(ctrl)
+    main->>View: setRefCtrl(ctrl)
+    main->>Controller: start()
 ```
 
 ### Javadoc
@@ -231,52 +264,52 @@ Vous pouvez cliquer sur [ce lien pour obtenir la JavaDoc en HTML](javadoc/PARTIE
 ### Portions de code
 Voici ci-dessous le code du `start()` de la classe `Controller` :
 ```
-/**
- * Méthode permettant de démarrer le contrôleur et donc la logique du programme.
- */
-public void start() {
+    /**
+     * Méthode permettant de démarrer le contrôleur et donc la logique du programme.
+     */
+    public void start() {
 
-    // Ajouter les CPUS connus
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel 4004", 1971, 2300, 0.06 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel 8088", 1972, 3500, 0.06 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel 8086", 1978, 29000, 0.33 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel 80286", 1982, 134000, 1 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel 80386", 1985, 275000, 5 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel 80486", 1989, 1200000, 20 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Pentium 1", 1993, 3100000, 100 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Pentium 2", 1997, 7500000, 300 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Pentium 3", 1999, 9500000, 510 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Pentium 4", 2000, 42000000, 1700 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Pentium 4 D (Prescott)", 2004, 125000000, 9000 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Core 2 Duo (Conroe)", 2006, 291000000, 22000 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Core i7 (Quad)", 2008, 731000000, 82300 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Core i7 (Gulftown)", 2010, 1170000000, 147600 ) );
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Intel Core i7 (Haswell-E)", 2014, 2600000000L, 238310 ) 
-    getRefWrk().CPU_AjouterUnNouveau( new CPU( "Oracle SPARC M7", 2015, 10000000000L ) );
+        // Ajouter les CPUS connus
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel 4004", 1971, 2300, 0.06));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel 8088", 1972, 3500, 0.06));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel 8086", 1978, 29000, 0.33));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel 80286", 1982, 134000, 1));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel 80386", 1985, 275000, 5));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel 80486", 1989, 1200000, 20));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Pentium 1", 1993, 3100000, 100));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Pentium 2", 1997, 7500000, 300));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Pentium 3", 1999, 9500000, 510));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Pentium 4", 2000, 42000000, 1700));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Pentium 4 D (Prescott)", 2004, 125000000, 9000));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Core 2 Duo (Conroe)", 2006, 291000000, 22000));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Core i7 (Quad)", 2008, 731000000, 82300));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Core i7 (Gulftown)", 2010, 1170000000, 147600));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Intel Core i7 (Haswell-E)", 2014, 2600000000L, 238310));
+        getRefServiceCPU().ajouterUnNouveau(new CPU("Oracle SPARC M7", 2015, 10000000000L));
 
-    // Demander la taille de notre liste de CPU
-    int tailleListeCPU = getRefWrk().CPU_TailleDeLaListe();
+        // Demander la taille de notre liste de CPU
+        int tailleListeCPU = getRefServiceCPU().tailleDeLaListe();
 
-    // Demander le nombre d'éléments contenus dans notre liste
-    int nbreElementsDansListeCPU = getRefWrk().CPU_NombreDeCPUDansLaListe();
+        // Demander le nombre d'éléments contenus dans notre liste
+        int nbreElementsDansListeCPU = getRefServiceCPU().nombreDeCPUDansLaListe();
 
-    // Débuter un nouveau rapport pour l'utilisateur
-    getRefIhm().rapport_Debut();
+        // Débuter un nouveau rapport pour l'utilisateur
+        getRefView().rapport_Debut();
 
-    // Passer en revue chaque CPU de notre liste
-    for ( int i = 0; i < tailleListeCPU; i++ ) {
-        // Mettre la main sur ce CPU-là
-        CPU cpu = getRefWrk().CPU_ObtenirUnElement( i );
-        // Y a-t-il un CPU ?
-        if ( cpu != null ) {
-            // Oui. Alors l'afficher !
-            getRefIhm().rapport_AfficherCPU( cpu );
+        // Passer en revue chaque CPU de notre liste
+        for (int i = 0; i < tailleListeCPU; i++) {
+            // Mettre la main sur ce CPU-là
+            CPU cpu = getRefServiceCPU().obtenirUnElement(i);
+            // Y a-t-il un CPU ?
+            if (cpu != null) {
+                // Oui. Alors l'afficher !
+                getRefView().rapport_AfficherCPU(cpu);
+            }
         }
-    }
 
-    // Terminer le nouveau rapport pour l'utilisateur
-    getRefIhm().rapport_Fin();
-}
+        // Terminer le nouveau rapport pour l'utilisateur
+        getRefView().rapport_Fin();
+    }
 ```
 
 ## PARTIE 5 : Changement d’Ihm
@@ -285,18 +318,19 @@ Un des bienfaits de l’architecture MVC c’est qu’on peut changer la façon 
 
 Pour le démontrer, remplacez le code de la view par le code ci-dessous. Essayez ensuite l’application:
 ```
-package views;
+package processeur.views;
 
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import processeur.beans.CPU;
-import processeur.ctrl.Ctrl;
+
+import processeur.ctrl.Controller;
+import processeur.models.CPU;
 
 /**
- * View principale MVC de l'application "Processeur".
+ * Vue principale MVC de l'application "Processeur".
  *
  * @author <a href="mailto:friedlip@edufr.ch">Paul Friedli</a>
  * @since 18 octobre 2023
@@ -382,20 +416,20 @@ public class View {
     }
 
     /**
-     * Setter de la référence au contrôleur de l'application MVC2 "Processeur".
+     * Setter de la référence au contrôleur de l'application MVC "Processeur".
      *
-     * @param refCtrl référence au contrôleur de l'application MVC2 "Processeur"
+     * @param refCtrl référence au contrôleur de l'application MVC "Processeur"
      */
-    public void setRefCtrl( Ctrl refCtrl ) {
+    public void setRefCtrl( Controller refCtrl ) {
         this.refCtrl = refCtrl;
     }
 
     /**
-     * Getter de la référence au contrôleur de l'application MVC2 "Processeur".
+     * Getter de la référence au contrôleur de l'application MVC "Processeur".
      *
-     * @return la référence au contrôleur de l'application MVC2 "Processeur"
+     * @return la référence au contrôleur de l'application MVC "Processeur"
      */
-    public Ctrl getRefCtrl() {
+    public Controller getRefCtrl() {
         return refCtrl;
     }
 

@@ -10,3 +10,4 @@ Pourquoi y a-t-il un **L** majuscule à la fin des deux dernières valeurs utili
 ```
 
 Votre réponse :
+La valeur du CPU 14 et 15 dépasse la limite du type primaire int qui est de 2'147'483'647. Si on indique pas le suffixe **L**, Java interprète toujours les nombres sous forme de int. Il est donc obligatoire de typé le nombre en un long en indiquant le suffixe **L**.
