@@ -1,5 +1,5 @@
 # Exercice 03 : Les Processeurs
-## durée : 105'
+## durée : 210'
 ## Objectifs visés :
 Utilisation de classes, fabrication et utilisation d‘objets, communication entre objets.
 
@@ -171,10 +171,10 @@ class View {
     -Controller refCtrl
     +View()
     +rapport_Debut() void
-    +rapport_AfficherCPU(CPU) void
+    +rapport_AfficherCPU(CPU cpu) void
     +rapport_Fin() void
-    +setRefCtrl(Controller ctrl)
-    +getRefCtrl(Controller ctrl)
+    +setRefCtrl(Controller refCtrl) void
+    +getRefCtrl() Controller
 }
 
 class Controller {
@@ -182,8 +182,8 @@ class Controller {
     -ServiceCPU refServiceCPU
     +Controller()
     +start() void
-    +setRefView(View view) void
-    +setRefServiceCPU(ServiceCPU service) void
+    +setRefView(View refView) void
+    +setRefServiceCPU(ServiceCPU refServiceCPU) void
     +getRefView() View
     +getRefServiceCPU() ServiceCPU
 }
