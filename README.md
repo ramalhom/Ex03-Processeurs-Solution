@@ -1,5 +1,5 @@
 # Exercice 03 : Les Processeurs
-## durée : 210'
+## Durée : 210'
 ## Objectifs visés :
 Utilisation de classes, fabrication et utilisation d‘objets, communication entre objets.
 
@@ -173,7 +173,7 @@ class View {
     +rapport_Debut() void
     +rapport_AfficherCPU(CPU cpu) void
     +rapport_Fin() void
-    +setRefCtrl(Controller refCtrl) void
+    +setRefCtrl(Controller refCtrl)
     +getRefCtrl() Controller
 }
 
@@ -436,8 +436,10 @@ public class View {
 }
 ```
 
-Bravo : vous venez de tranformer votre application qui affiche désormais les informations dans un tableau Swing minimaliste qui ressemble à cela sur Mac respectivement Windows.
+Bravo : vous venez de tranformer votre application qui affiche désormais les informations dans un tableau Swing minimaliste.
 
+Voici à quoi cela devrait ressembler :
+| Sur Windows | Sur Mac |
+| :----: | :----: |
+| ![Aperçu sur Mac](images/processeur_app_mac.png) | ![Aperçu sur Windows](images/processeur_app_windows.png) |
 
-![Aperçu sur Mac](images/processeur_app_mac.png)
-![Aperçu sur Windows](images/processeur_app_windows.png)
