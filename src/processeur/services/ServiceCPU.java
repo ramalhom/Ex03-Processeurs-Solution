@@ -77,7 +77,7 @@ public class ServiceCPU {
         // On va parcourir notre liste à la recherche d'objet non null dans notre
         // tableau
         for (int i = 0; i < cpus.length; i++) {
-            // Il y a t'il un objet ?
+            // Y a-t-il un objet ?
             if (cpus[i] != null) {
                 // Oui, alors on peut incrémenter notre résultat pour compter le nombre
                 // d'élément
