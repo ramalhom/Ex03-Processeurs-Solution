@@ -1,4 +1,4 @@
-# Exercice 03 : Les Processeurs
+# Exercice 03 : Les Processeurs - Solution
 ## Durée : 210'
 ## Objectifs visés :
 Utilisation de classes, fabrication et utilisation d‘objets, communication entre objets.
